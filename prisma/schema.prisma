@@ -1,0 +1,74 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  clerkId       String    @unique
+  email         String    @unique
+  projects      Project[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Project {
+  id            String         @id @default(cuid())
+  userId        String
+  user          User           @relation(fields: [userId], references: [id])
+  name          String
+  goal          String
+  niche         String
+  constraints   String?
+  stage         String         @default("IDEA")
+  reports       WeeklyReport[]
+  memory        Json?          // Aggregated AI insights over time
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model WeeklyReport {
+  id            String             @id @default(cuid())
+  projectId     String
+  project       Project            @relation(fields: [projectId], references: [id])
+  content       String             // The raw report text
+  metrics       Json?              // Extracted numeric data (e.g. revenue, outreach)
+  advice        DepartmentAdvice[]
+  weekNumber    Int
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+}
+
+model DepartmentAdvice {
+  id              String       @id @default(cuid())
+  reportId        String
+  report          WeeklyReport @relation(fields: [reportId], references: [id])
+  department      DepartmentType
+  assessment      String
+  problems        String[]
+  opportunities   String[]
+  recommendations String[]
+  priority        PriorityLevel
+  createdAt       DateTime     @default(now())
+}
+
+enum DepartmentType {
+  MARKETING
+  SALES
+  PRODUCT
+  UX
+  DEVELOPMENT
+  FINANCE
+  CEO
+}
+
+enum PriorityLevel {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+}
