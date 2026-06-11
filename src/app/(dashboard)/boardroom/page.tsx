@@ -28,8 +28,8 @@ export default async function BoardroomIndexPage() {
   return (
     <div className="space-y-8">
       <header>
-        <h1 className="text-4xl font-display tracking-tight mb-2">The Boardroom</h1>
-        <p className="text-charcoal text-lg">Access your historical executive sessions and strategic archives.</p>
+        <h1 className="text-3xl md:text-4xl font-display tracking-tight mb-2">The Boardroom</h1>
+        <p className="text-charcoal text-base md:text-lg">Access your historical executive sessions and strategic archives.</p>
       </header>
 
       {reports.length === 0 ? (

@@ -25,13 +25,13 @@ export default async function ProjectsPage() {
 
   return (
     <div className="space-y-8">
-      <header className="flex items-center justify-between">
+      <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-display tracking-tight mb-2">My Projects</h1>
-          <p className="text-charcoal text-lg">Manage your ventures and board configurations.</p>
+          <h1 className="text-3xl md:text-4xl font-display tracking-tight mb-2">My Projects</h1>
+          <p className="text-charcoal text-base md:text-lg">Manage your ventures and board configurations.</p>
         </div>
-        <Link href="/projects/new">
-          <Button className="gap-2">
+        <Link href="/projects/new" className="w-full md:w-auto">
+          <Button className="gap-2 w-full md:w-auto">
             <Plus size={18} />
             New Project
           </Button>

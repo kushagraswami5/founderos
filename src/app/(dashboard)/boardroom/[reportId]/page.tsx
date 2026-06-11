@@ -30,12 +30,12 @@ export default async function BoardroomReportPage({
             <Rocket size={14} />
             {report.project.name}
           </div>
-          <h1 className="text-5xl font-display tracking-tight">Boardroom Review</h1>
-          <p className="text-charcoal text-lg max-w-2xl">
+          <h1 className="text-3xl md:text-5xl font-display tracking-tight">Boardroom Review</h1>
+          <p className="text-charcoal text-base md:text-lg max-w-2xl">
             The executive board has convened to analyze your progress for Week {report.weekNumber}.
           </p>
         </div>
-        <div className="flex items-center gap-2 text-charcoal bg-white/5 px-4 py-2 rounded-full text-sm">
+        <div className="flex items-center gap-2 text-charcoal bg-white/5 px-4 py-2 rounded-full text-xs md:text-sm self-start md:self-end">
           <Calendar size={16} />
           {new Date(report.createdAt).toLocaleDateString("en-US", { 
             month: "long", 

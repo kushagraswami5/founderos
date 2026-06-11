@@ -48,8 +48,8 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-8">
       <header>
-        <h1 className="text-4xl font-display tracking-tight mb-2">Welcome, {user?.firstName || "Founder"}</h1>
-        <p className="text-charcoal text-lg">Here's the status of your venture capital board.</p>
+        <h1 className="text-3xl md:text-4xl font-display tracking-tight mb-2">Welcome, {user?.firstName || "Founder"}</h1>
+        <p className="text-charcoal text-base md:text-lg">Here's the status of your venture capital board.</p>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

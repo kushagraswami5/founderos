@@ -1,18 +1,20 @@
 "use client";
-
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
-import { ShieldAlert, Users, Zap, Database, TrendingUp, ArrowRight } from "lucide-react";
+import { ShieldAlert, Users, Zap, Database, TrendingUp, ArrowRight, Menu, X } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function LandingPage() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+// ... existing GSAP logic ...
+
       // Hero reveal - using fromTo with clearProps for reliability
       gsap.fromTo(".hero-title", 
         { y: 100, opacity: 0 },
@@ -94,7 +96,7 @@ export default function LandingPage() {
   return (
     <div ref={containerRef} className="bg-canvas text-ink overflow-x-hidden">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 border-b border-hairline bg-canvas/80 backdrop-blur-md">
+      <nav className="fixed top-0 w-full z-50 border-b border-hairline bg-canvas/80 backdrop-blur-md transition-all">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 bg-white rounded flex items-center justify-center">
@@ -102,43 +104,76 @@ export default function LandingPage() {
             </div>
             <span className="font-display text-lg tracking-tight">FounderOS</span>
           </div>
+
+          {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8 text-sm text-charcoal">
             <a href="#features" className="hover:text-white transition-colors">Features</a>
             <a href="#boardroom" className="hover:text-white transition-colors">The Boardroom</a>
             <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
           </div>
+
           <div className="flex items-center gap-4">
-            <Link href="/dashboard" className="text-sm text-charcoal hover:text-white transition-colors">Sign In</Link>
-            <Link href="/dashboard" className="bg-white text-black px-4 py-2 rounded-md text-sm font-medium hover:bg-zinc-200 transition-all">
-              Get Started
-            </Link>
+            <div className="hidden md:flex items-center gap-4">
+              <Link href="/dashboard" className="text-sm text-charcoal hover:text-white transition-colors">Sign In</Link>
+              <Link href="/dashboard" className="bg-white text-black px-4 py-2 rounded-md text-sm font-medium hover:bg-zinc-200 transition-all">
+                Get Started
+              </Link>
+            </div>
+            
+            {/* Mobile Menu Toggle */}
+            <button 
+              className="md:hidden p-2 text-charcoal hover:text-white transition-colors"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
           </div>
         </div>
+
+        {/* Mobile Menu Overlay */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden fixed inset-0 top-16 bg-canvas z-40 animate-in fade-in slide-in-from-top-4 duration-300">
+            <div className="p-6 flex flex-col gap-6">
+              <nav className="flex flex-col gap-4">
+                <a href="#features" className="text-xl font-medium" onClick={() => setIsMobileMenuOpen(false)}>Features</a>
+                <a href="#boardroom" className="text-xl font-medium" onClick={() => setIsMobileMenuOpen(false)}>The Boardroom</a>
+                <a href="#pricing" className="text-xl font-medium" onClick={() => setIsMobileMenuOpen(false)}>Pricing</a>
+              </nav>
+              <hr className="border-hairline" />
+              <div className="flex flex-col gap-4">
+                <Link href="/dashboard" className="text-lg text-charcoal" onClick={() => setIsMobileMenuOpen(false)}>Sign In</Link>
+                <Link href="/dashboard" className="bg-white text-black h-12 rounded-lg flex items-center justify-center font-medium" onClick={() => setIsMobileMenuOpen(false)}>
+                  Get Started
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* Hero Section */}
-      <section className="relative pt-40 pb-20 md:pt-60 md:pb-40 px-6">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[800px] glow-orange pointer-events-none opacity-40" />
+      <section className="relative pt-32 pb-20 md:pt-60 md:pb-40 px-6">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] md:h-[800px] glow-orange pointer-events-none opacity-30 md:opacity-40" />
         
-        <div className="relative z-10 max-w-5xl mx-auto text-center space-y-8">
-          <div className="hero-cta inline-flex items-center gap-2 px-3 py-1 rounded-full border border-hairline-strong bg-white/5 text-[10px] font-bold tracking-widest uppercase text-accent-orange">
+        <div className="relative z-10 max-w-5xl mx-auto text-center space-y-6 md:space-y-8">
+          <div className="hero-cta inline-flex items-center gap-2 px-3 py-1 rounded-full border border-hairline-strong bg-white/5 text-[9px] md:text-[10px] font-bold tracking-widest uppercase text-accent-orange">
             <Zap size={12} /> Version 1.0 Now Live
           </div>
           
-          <h1 className="hero-title text-6xl md:text-9xl font-display tracking-tight leading-[0.95] text-balance">
+          <h1 className="hero-title text-5xl md:text-9xl font-display tracking-tight leading-[0.95] text-balance">
             Your AI <br /> <span className="text-ink/40 italic">Boardroom.</span>
           </h1>
           
-          <p className="hero-sub text-xl md:text-3xl text-charcoal max-w-3xl mx-auto font-favorit leading-relaxed">
+          <p className="hero-sub text-lg md:text-3xl text-charcoal max-w-3xl mx-auto font-favorit leading-relaxed">
             Stop building in the dark. Meet your new executive board: 7 AI specialists 
             with persistent memory and lethal strategic focus.
           </p>
 
-          <div className="hero-cta flex flex-col sm:flex-row gap-4 justify-center pt-8">
-            <Link href="/dashboard" className="bg-white text-black h-14 px-10 rounded-lg flex items-center justify-center text-lg font-medium hover:bg-zinc-200 transition-all hover:scale-105 active:scale-95">
+          <div className="hero-cta flex flex-col sm:flex-row gap-4 justify-center pt-6 md:pt-8">
+            <Link href="/dashboard" className="bg-white text-black h-12 md:h-14 px-8 md:px-10 rounded-lg flex items-center justify-center text-base md:text-lg font-medium hover:bg-zinc-200 transition-all hover:scale-105 active:scale-95">
               Enter the Boardroom
             </Link>
-            <button className="border border-hairline-strong h-14 px-10 rounded-lg flex items-center justify-center text-lg font-medium hover:bg-white/5 transition-all">
+            <button className="border border-hairline-strong h-12 md:h-14 px-8 md:px-10 rounded-lg flex items-center justify-center text-base md:text-lg font-medium hover:bg-white/5 transition-all">
               Watch Execution Loop
             </button>
           </div>
