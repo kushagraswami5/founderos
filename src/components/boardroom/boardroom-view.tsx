@@ -37,10 +37,9 @@ export function BoardroomView({
   initialAdvice: DepartmentAdvice[] 
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [advice, setAdvice] = useState<DepartmentAdvice[]>(initialAdvice);
 
   useEffect(() => {
-    if (advice.length > 0) {
+    if (initialAdvice.length > 0) {
       const ctx = gsap.context(() => {
         gsap.fromTo(".dept-card", 
           { y: 50, opacity: 0 },
@@ -56,9 +55,9 @@ export function BoardroomView({
       }, containerRef);
       return () => ctx.revert();
     }
-  }, [advice]);
+  }, [initialAdvice]);
 
-  if (advice.length === 0) {
+  if (initialAdvice.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] space-y-6">
         <div className="relative">
@@ -76,8 +75,8 @@ export function BoardroomView({
     );
   }
 
-  const ceoAdvice = advice.find(a => a.department === "CEO");
-  const deptAdvice = advice.filter(a => a.department !== "CEO");
+  const ceoAdvice = initialAdvice.find(a => a.department === "CEO");
+  const deptAdvice = initialAdvice.filter(a => a.department !== "CEO");
 
   return (
     <div ref={containerRef} className="space-y-12 pb-20">
