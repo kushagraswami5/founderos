@@ -5,7 +5,6 @@ import gsap from "gsap";
 import { DepartmentAdvice, DepartmentType } from "@prisma/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { 
   AlertCircle, 
   TrendingUp, 
@@ -17,8 +16,7 @@ import {
   BarChart3,
   Cpu,
   Palette,
-  Users,
-  Trash2
+  Users
 } from "lucide-react";
 
 const deptConfig: Record<string, { icon: any, color: string, glow: string }> = {
@@ -33,26 +31,12 @@ const deptConfig: Record<string, { icon: any, color: string, glow: string }> = {
 
 export function BoardroomView({ 
   reportId, 
-  initialAdvice,
-  onDelete
+  initialAdvice 
 }: { 
   reportId: string, 
-  initialAdvice: DepartmentAdvice[],
-  onDelete: (id: string) => Promise<void>
+  initialAdvice: DepartmentAdvice[] 
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isDeleting, setIsDeleting] = useState<string | null>(null);
-
-  const handleDelete = async (id: string) => {
-    if (confirm("Are you sure you want to delete this advice?")) {
-      setIsDeleting(id);
-      try {
-        await onDelete(id);
-      } finally {
-        setIsDeleting(null);
-      }
-    }
-  };
 
   useEffect(() => {
     if (initialAdvice.length > 0) {
@@ -101,25 +85,14 @@ export function BoardroomView({
         <section className="dept-card relative overflow-hidden rounded-xl border border-hairline-strong bg-surface-elevated p-1">
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
           <div className="relative z-10 p-8 space-y-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="p-3 bg-white text-black rounded-lg">
-                  <ShieldAlert size={24} />
-                </div>
-                <div>
-                  <h2 className="text-3xl font-display tracking-tight">Executive Summary</h2>
-                  <p className="text-charcoal">Lead CEO Advisor</p>
-                </div>
+            <div className="flex items-center gap-3">
+              <div className="p-3 bg-white text-black rounded-lg">
+                <ShieldAlert size={24} />
               </div>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="text-charcoal hover:text-accent-red hover:bg-accent-red/10"
-                onClick={() => handleDelete(ceoAdvice.id)}
-                disabled={isDeleting === ceoAdvice.id}
-              >
-                <Trash2 size={18} />
-              </Button>
+              <div>
+                <h2 className="text-3xl font-display tracking-tight">Executive Summary</h2>
+                <p className="text-charcoal">Lead CEO Advisor</p>
+              </div>
             </div>
             
             <p className="text-xl leading-relaxed font-favorit">
@@ -175,20 +148,9 @@ export function BoardroomView({
                     <Icon size={18} />
                     <span className="text-xs font-bold uppercase tracking-widest">{item.department}</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Badge variant={item.priority === "CRITICAL" ? "destructive" : "outline"} className="text-[10px]">
-                      {item.priority}
-                    </Badge>
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="h-6 w-6 text-charcoal opacity-0 group-hover:opacity-100 transition-opacity hover:text-accent-red hover:bg-accent-red/10"
-                      onClick={() => handleDelete(item.id)}
-                      disabled={isDeleting === item.id}
-                    >
-                      <Trash2 size={14} />
-                    </Button>
-                  </div>
+                  <Badge variant={item.priority === "CRITICAL" ? "destructive" : "outline"} className="text-[10px]">
+                    {item.priority}
+                  </Badge>
                 </div>
                 <CardTitle className="text-lg font-medium leading-snug">
                   {item.assessment}

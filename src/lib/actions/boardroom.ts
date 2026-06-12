@@ -75,11 +75,3 @@ export async function runBoardroomMeeting(reportId: string) {
   revalidatePath(`/boardroom/${reportId}`);
   return adviceResults;
 }
-
-export async function deleteDepartmentAdvice(adviceId: string, reportId: string) {
-  await db.departmentAdvice.delete({
-    where: { id: adviceId }
-  });
-
-  revalidatePath(`/boardroom/${reportId}`);
-}
