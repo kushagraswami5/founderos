@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { runBoardroomMeeting } from "@/lib/actions/boardroom";
+import { runBoardroomMeeting, deleteDepartmentAdvice } from "@/lib/actions/boardroom";
 import { BoardroomView } from "./boardroom-view";
 import { DepartmentAdvice } from "@prisma/client";
 
@@ -36,5 +36,15 @@ export function BoardroomMeeting({
     startMeeting();
   }, [reportId, existingAdvice, router]);
 
-  return <BoardroomView reportId={reportId} initialAdvice={advice} />;
+  const handleDelete = async (adviceId: string) => {
+    try {
+      await deleteDepartmentAdvice(adviceId, reportId);
+      setAdvice(prev => prev.filter(a => a.id !== adviceId));
+      router.refresh();
+    } catch (error) {
+      console.error("Failed to delete advice:", error);
+    }
+  };
+
+  return <BoardroomView reportId={reportId} initialAdvice={advice} onDelete={handleDelete} />;
 }
