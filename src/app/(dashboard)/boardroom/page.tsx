@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, Calendar, ArrowRight, ShieldAlert } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { DeleteReviewButton } from "@/components/boardroom/delete-review-button";
 
 export default async function BoardroomIndexPage() {
   const user = await currentUser();
@@ -75,8 +76,9 @@ export default async function BoardroomIndexPage() {
                         {report.advice[0]?.assessment || "Analysis pending..."}
                       </p>
                     </div>
-                    <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <ArrowRight size={20} className="text-white" />
+                    <div className="absolute bottom-6 right-6 flex items-center gap-2">
+                      <DeleteReviewButton reportId={report.id} />
+                      <ArrowRight size={20} className="text-white opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
                   </div>
                 </div>

@@ -50,6 +50,39 @@ export async function submitWeeklyReport(values: z.infer<typeof reportSchema>) {
   return report;
 }
 
+export async function deleteWeeklyReport(reportId: string) {
+  const user = await currentUser();
+  if (!user) throw new Error("Unauthorized");
+
+  const dbUser = await db.user.findUnique({
+    where: { clerkId: user.id },
+  });
+
+  if (!dbUser) throw new Error("User not found");
+
+  // Verify ownership through project
+  const report = await db.weeklyReport.findUnique({
+    where: { id: reportId },
+    include: { project: true }
+  });
+
+  if (!report || report.project.userId !== dbUser.id) {
+    throw new Error("Report not found or unauthorized");
+  }
+
+  const projectId = report.projectId;
+
+  await db.$transaction([
+    db.departmentAdvice.deleteMany({ where: { reportId } }),
+    db.weeklyReport.delete({ where: { id: reportId } })
+  ]);
+
+  revalidatePath("/dashboard");
+  revalidatePath("/boardroom");
+  revalidatePath(`/projects/${projectId}`);
+  revalidatePath(`/boardroom/${reportId}`);
+}
+
 export async function getProjects() {
   const user = await currentUser();
   if (!user) return [];
